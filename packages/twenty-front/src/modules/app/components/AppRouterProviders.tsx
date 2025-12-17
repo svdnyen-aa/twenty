@@ -2,6 +2,7 @@ import { ApolloProvider } from '@/apollo/components/ApolloProvider';
 import { GotoHotkeysEffectsProvider } from '@/app/effect-components/GotoHotkeysEffectsProvider';
 import { PageChangeEffect } from '@/app/effect-components/PageChangeEffect';
 import { AuthProvider } from '@/auth/components/AuthProvider';
+import { SubscriptionProvider } from '@/subscription/components/SubscriptionProvider';
 import { CaptchaProvider } from '@/captcha/components/CaptchaProvider';
 import { ChromeExtensionSidecarEffect } from '@/chrome-extension-sidecar/components/ChromeExtensionSidecarEffect';
 import { ChromeExtensionSidecarProvider } from '@/chrome-extension-sidecar/components/ChromeExtensionSidecarProvider';
@@ -44,7 +45,8 @@ export const AppRouterProviders = () => {
             <ChromeExtensionSidecarProvider>
               <UserProvider>
                 <AuthProvider>
-                  <ApolloCoreProvider>
+                  <SubscriptionProvider>
+                    <ApolloCoreProvider>
                     <ObjectMetadataItemsLoadEffect />
                     <ObjectMetadataItemsProvider>
                       <PrefetchDataProvider>
@@ -69,7 +71,8 @@ export const AppRouterProviders = () => {
                       </PrefetchDataProvider>
                       <PageChangeEffect />
                     </ObjectMetadataItemsProvider>
-                  </ApolloCoreProvider>
+                    </ApolloCoreProvider>
+                  </SubscriptionProvider>
                 </AuthProvider>
               </UserProvider>
             </ChromeExtensionSidecarProvider>
