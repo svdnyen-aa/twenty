@@ -3,11 +3,12 @@ import { Inject, Module, type OnModuleDestroy } from '@nestjs/common';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
-import { QueryParserService } from 'src/engine/subscriptions/services/query-parser.service';
+import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
+import { SubscriptionsService } from 'src/engine/subscriptions/services/subscriptions.service';
 import { SubscriptionsResolver } from 'src/engine/subscriptions/subscriptions.resolver';
-import { SubscriptionsService } from 'src/engine/subscriptions/subscriptions.service';
 
 @Module({
+  imports: [WorkspaceManyOrAllFlatEntityMapsCacheModule],
   providers: [
     {
       provide: 'PUB_SUB',
@@ -21,7 +22,6 @@ import { SubscriptionsService } from 'src/engine/subscriptions/subscriptions.ser
     },
     SubscriptionsResolver,
     SubscriptionsService,
-    QueryParserService,
   ],
   exports: ['PUB_SUB', SubscriptionsService],
 })
