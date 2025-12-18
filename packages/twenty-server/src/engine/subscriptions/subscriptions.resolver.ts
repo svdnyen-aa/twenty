@@ -12,8 +12,8 @@ import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
 import { ON_DB_EVENT_TRIGGER } from 'src/engine/subscriptions/constants/on-db-event-trigger';
 import { OnDbEventDTO } from 'src/engine/subscriptions/dtos/on-db-event.dto';
 import { OnDbEventInput } from 'src/engine/subscriptions/dtos/on-db-event.input';
-import { QuerySubscriptionInput } from 'src/engine/subscriptions/dtos/query-subscription.input';
-import { RefetchSignalDTO } from 'src/engine/subscriptions/dtos/refetch-signal.dto';
+import { SubscriptionMatchesDTO } from 'src/engine/subscriptions/dtos/subscription-matches.dto';
+import { SubscriptionInput } from 'src/engine/subscriptions/dtos/subscription.input';
 import { SubscriptionsService } from 'src/engine/subscriptions/services/subscriptions.service';
 
 @Resolver()
@@ -53,23 +53,24 @@ export class SubscriptionsResolver {
     return this.pubSub.asyncIterator(ON_DB_EVENT_TRIGGER);
   }
 
-  @Subscription(() => RefetchSignalDTO, {
+  @Subscription(() => SubscriptionMatchesDTO, {
     nullable: true,
     resolve: async function (
       this: SubscriptionsResolver,
       payload: { onDbEvent: OnDbEventDTO },
-      args: { subscriptions: QuerySubscriptionInput[] },
+      args: { subscriptions: SubscriptionInput[] },
       context: { req: { workspace: { id: string } } },
-    ): Promise<RefetchSignalDTO | null> {
+    ): Promise<SubscriptionMatchesDTO> {
       const workspaceId = context.req.workspace.id;
 
       const matchedSubscriptionIds = await Promise.all(
         args.subscriptions.map(async (subscription) => {
-          const matches = await this.subscriptionsService.isQueryMatchingEvent(
-            subscription.query,
-            payload.onDbEvent,
-            workspaceId,
-          );
+          const matches =
+            await this.subscriptionsService.isSubscriptionMatchingEvent(
+              subscription,
+              payload.onDbEvent,
+              workspaceId,
+            );
 
           return matches ? subscription.id : null;
         }),
@@ -80,17 +81,17 @@ export class SubscriptionsResolver {
       );
 
       if (filteredIds.length === 0) {
-        return null;
+        return { subscriptions: [] };
       }
 
       return {
-        subscriptionIds: filteredIds,
+        subscriptions: filteredIds.map((id) => ({ id })),
       };
     },
   })
-  onRefetchSignal(
-    @Args('subscriptions', { type: () => [QuerySubscriptionInput] })
-    _: QuerySubscriptionInput[],
+  onSubscriptionMatch(
+    @Args('subscriptions', { type: () => [SubscriptionInput] })
+    _: SubscriptionInput[],
   ) {
     return this.pubSub.asyncIterator(ON_DB_EVENT_TRIGGER);
   }
