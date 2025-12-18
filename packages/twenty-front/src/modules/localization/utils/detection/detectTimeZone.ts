@@ -1,3 +1,5 @@
+import { Intl } from 'temporal-polyfill';
+
 /**
  * Detects the user's time zone.
  * @returns a IANA time zone

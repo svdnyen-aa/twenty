@@ -25,6 +25,7 @@ type TransformOneDimensionalGroupByToBarChartDataParams = {
   aggregateOperation: string;
   objectMetadataItem: ObjectMetadataItem;
   primaryAxisSubFieldName?: string | null;
+  userTimezone: string;
 };
 
 type TransformOneDimensionalGroupByToBarChartDataResult = {
@@ -34,6 +35,7 @@ type TransformOneDimensionalGroupByToBarChartDataResult = {
   series: BarChartSeries[];
   hasTooManyGroups: boolean;
   formattedToRawLookup: Map<string, RawDimensionValue>;
+  userTimezone: string;
 };
 
 export const transformOneDimensionalGroupByToBarChartData = ({
@@ -44,6 +46,7 @@ export const transformOneDimensionalGroupByToBarChartData = ({
   aggregateOperation,
   objectMetadataItem,
   primaryAxisSubFieldName,
+  userTimezone,
 }: TransformOneDimensionalGroupByToBarChartDataParams): TransformOneDimensionalGroupByToBarChartDataResult => {
   const indexByKey = getFieldKey({
     field: groupByFieldX,
@@ -67,6 +70,7 @@ export const transformOneDimensionalGroupByToBarChartData = ({
     primaryAxisDateGranularity:
       configuration.primaryAxisDateGranularity ?? undefined,
     primaryAxisGroupBySubFieldName: primaryAxisSubFieldName ?? undefined,
+    userTimezone,
   });
 
   const formattedToRawLookup = buildFormattedToRawLookup(formattedValues);
@@ -82,6 +86,7 @@ export const transformOneDimensionalGroupByToBarChartData = ({
             configuration.primaryAxisDateGranularity ?? undefined,
           subFieldName:
             configuration.primaryAxisGroupBySubFieldName ?? undefined,
+          userTimezone,
         })
       : '';
 
@@ -125,5 +130,6 @@ export const transformOneDimensionalGroupByToBarChartData = ({
     hasTooManyGroups:
       rawResults.length > BAR_CHART_CONSTANTS.MAXIMUM_NUMBER_OF_BARS,
     formattedToRawLookup,
+    userTimezone,
   };
 };

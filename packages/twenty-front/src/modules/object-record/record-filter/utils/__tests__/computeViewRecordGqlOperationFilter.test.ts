@@ -26,6 +26,7 @@ const personMockObjectMetadataItem = getMockObjectMetadataItemOrThrow('person');
 
 const mockFilterValueDependencies: RecordFilterValueDependencies = {
   currentWorkspaceMemberId: '32219445-f587-4c40-b2b1-6d3205ed96da',
+  timeZone: 'Europe/Paris',
 };
 
 jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
@@ -1068,7 +1069,7 @@ describe('should work as expected for the different field types', () => {
       and: [
         {
           createdAt: {
-            gt: '2024-09-17T20:46:58.922Z',
+            gte: '2024-09-17T20:46:58.922Z',
           },
         },
         {

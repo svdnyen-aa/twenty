@@ -7,6 +7,7 @@ import { getEffectiveGroupMode } from '@/page-layout/widgets/graph/graphWidgetBa
 import { assertBarChartWidgetOrThrow } from '@/page-layout/widgets/graph/utils/assertBarChartWidget';
 import { buildChartDrilldownQueryParams } from '@/page-layout/widgets/graph/utils/buildChartDrilldownQueryParams';
 import { generateChartAggregateFilterKey } from '@/page-layout/widgets/graph/utils/generateChartAggregateFilterKey';
+import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { useRecoilComponentValue } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentValue';
 import { coreIndexViewIdFromObjectMetadataItemFamilySelector } from '@/views/states/selectors/coreIndexViewIdFromObjectMetadataItemFamilySelector';
 import { type BarDatum, type ComputedDatum } from '@nivo/bar';
@@ -31,6 +32,8 @@ export const GraphWidgetBarChartRenderer = ({
 }) => {
   assertBarChartWidgetOrThrow(widget);
 
+  const { userTimezone } = useUserTimezone();
+
   const {
     data,
     indexBy,
@@ -48,6 +51,22 @@ export const GraphWidgetBarChartRenderer = ({
   } = useGraphBarChartWidgetData({
     objectMetadataItemId: widget.objectMetadataId,
     configuration: widget.configuration,
+  });
+
+  console.log({
+    data,
+    indexBy,
+    keys,
+    series,
+    xAxisLabel,
+    yAxisLabel,
+    showDataLabels,
+    showLegend,
+    layout,
+    loading,
+    hasTooManyGroups,
+    formattedToRawLookup,
+    objectMetadataItem,
   });
 
   const navigate = useNavigate();
@@ -86,7 +105,7 @@ export const GraphWidgetBarChartRenderer = ({
         primaryBucketRawValue: rawValue,
       },
       viewId: indexViewId,
-      timezone: configuration.timezone ?? undefined,
+      timezone: userTimezone,
     });
 
     const url = getAppPath(

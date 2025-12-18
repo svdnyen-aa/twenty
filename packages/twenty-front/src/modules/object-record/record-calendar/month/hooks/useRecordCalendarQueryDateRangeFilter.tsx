@@ -7,8 +7,8 @@ import { currentRecordFiltersComponentState } from '@/object-record/record-filte
 import { type RecordFilter } from '@/object-record/record-filter/types/RecordFilter';
 import { RecordFilterOperand } from '@/object-record/record-filter/types/RecordFilterOperand';
 import { useRecoilComponentValue } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentValue';
-import { t } from '@lingui/core/macro';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
+import { t } from '@lingui/core/macro';
 import {
   combineFilters,
   computeRecordGqlOperationFilter,
@@ -57,7 +57,7 @@ export const useRecordCalendarQueryDateRangeFilter = (selectedDate: Date) => {
     value: `${firstDayOfFirstWeek.toISOString()}`,
     operand: RecordFilterOperand.IS_AFTER,
     type: 'DATE',
-    label: t`After`,
+    label: 'After or equal',
     displayValue: `${firstDayOfFirstWeek.toISOString()}`,
   };
 

@@ -16,7 +16,7 @@ export const getOperandLabel = (
     case ViewFilterOperand.IS_BEFORE:
       return t`Is before`;
     case ViewFilterOperand.IS_AFTER:
-      return t`Is after`;
+      return t`Is after or equal`;
     case ViewFilterOperand.IS:
       return t`Is`;
     case ViewFilterOperand.IS_NOT:
@@ -63,7 +63,7 @@ export const getOperandLabelShort = (
     case ViewFilterOperand.IS_BEFORE:
       return '\u00A0< ';
     case ViewFilterOperand.IS_AFTER:
-      return '\u00A0> ';
+      return '\u00A0≥ ';
     case ViewFilterOperand.IS_IN_PAST:
       return t`: Past`;
     case ViewFilterOperand.IS_IN_FUTURE:

@@ -20,6 +20,7 @@ export { sumByProperty } from './array/sumByProperty';
 export { upsertIntoArrayOfObjectsComparingId } from './array/upsertIntoArrayOfObjectComparingId';
 export { assertUnreachable } from './assertUnreachable';
 export { computeDiffBetweenObjects } from './compute-diff-between-objects';
+export { parseToPlainDateOrThrow } from './date/parseToPlainDateOrThrow';
 export { deepMerge } from './deepMerge';
 export { CustomError } from './errors/CustomError';
 export { extractAndSanitizeObjectStringFields } from './extractAndSanitizeObjectStringFields';
@@ -32,12 +33,20 @@ export { computeGqlOperationFilterForLinks } from './filter/compute-record-gql-o
 export { computeEmptyGqlOperationFilterForEmails } from './filter/computeEmptyGqlOperationFilterForEmails';
 export { computeEmptyGqlOperationFilterForLinks } from './filter/computeEmptyGqlOperationFilterForLinks';
 export { computeRecordGqlOperationFilter } from './filter/computeRecordGqlOperationFilter';
+export type { DateTimePeriod } from './filter/dates/types/DateTimePeriod';
 export { addUnitToDateTime } from './filter/dates/utils/addUnitToDateTime';
+export { addUnitToZonedDateTime } from './filter/dates/utils/addUnitToZonedDateTime';
 export type { FirstDayOfTheWeek } from './filter/dates/utils/firstDayOfWeekSchema';
 export { firstDayOfWeekSchema } from './filter/dates/utils/firstDayOfWeekSchema';
 export { getDateFromPlainDate } from './filter/dates/utils/getDateFromPlainDate';
 export { getEndUnitOfDateTime } from './filter/dates/utils/getEndUnitOfDateTime';
 export { getFirstDayOfTheWeekAsANumberForDateFNS } from './filter/dates/utils/getFirstDayOfTheWeekAsANumberForDateFNS';
+export { getFirstDayOfTheWeekAsISONumber } from './filter/dates/utils/getFirstDayOfTheWeekAsISONumber';
+export {
+  FIRST_DAY_OF_WEEK_ISO_8601_MONDAY,
+  getNextPeriodStart,
+} from './filter/dates/utils/getNextPeriodStart';
+export { getPeriodStart } from './filter/dates/utils/getPeriodStart';
 export { getPlainDateFromDate } from './filter/dates/utils/getPlainDateFromDate';
 export { getStartUnitOfDateTime } from './filter/dates/utils/getStartUnitOfDateTime';
 export { relativeDateFilterAmountSchema } from './filter/dates/utils/relativeDateFilterAmountSchema';
@@ -58,6 +67,7 @@ export { resolveRelativeDateTimeFilter } from './filter/dates/utils/resolveRelat
 export { resolveRelativeDateTimeFilterStringified } from './filter/dates/utils/resolveRelativeDateTimeFilterStringified';
 export { shiftPointInTimeFromTimezoneDifferenceInMinutesWithSystemTimezone } from './filter/dates/utils/shiftPointInTimeFromTimezoneDifferenceInMinutesWithSystemTimezone';
 export { subUnitFromDateTime } from './filter/dates/utils/subUnitFromDateTime';
+export { subUnitFromZonedDateTime } from './filter/dates/utils/subUnitFromZonedDateTime';
 export { isEmptinessOperand } from './filter/isEmptinessOperand';
 export { turnAnyFieldFilterIntoRecordGqlFilter } from './filter/turnAnyFieldFilterIntoRecordGqlFilter';
 export type {

@@ -1,5 +1,6 @@
 import { tzOffset } from '@date-fns/tz';
 
+// TODO: replace this with Temporal
 export const computeTimezoneDifferenceInMinutes = (
   timezoneA: string,
   timezoneB: string,

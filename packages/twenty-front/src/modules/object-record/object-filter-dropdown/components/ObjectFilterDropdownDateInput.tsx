@@ -40,6 +40,7 @@ export const ObjectFilterDropdownDateInput = () => {
   const handleAbsoluteDateChange = (newPlainDate: string | null) => {
     const newFilterValue = newPlainDate ?? '';
 
+    // TODO: remove this and use getDisplayValue instead
     const formattedDate = formatDateString({
       value: newPlainDate,
       timeZone,

@@ -1,5 +1,6 @@
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import styled from '@emotion/styled';
+import { Temporal } from 'temporal-polyfill';
 
 const StyledTimezoneAbbreviation = styled.span<{ hasError?: boolean }>`
   background: transparent;
@@ -14,12 +15,19 @@ const StyledTimezoneAbbreviation = styled.span<{ hasError?: boolean }>`
 `;
 
 export const TimeZoneAbbreviation = ({ date }: { date: Date }) => {
-  const { isSystemTimezone, getTimezoneAbbreviationForPointInTime } =
-    useUserTimezone();
+  const {
+    isSystemTimezone,
+    getTimezoneAbbreviationForPointInTime,
+    userTimezone,
+  } = useUserTimezone();
+
+  const zonedDate = Temporal.Instant.from(
+    date.toISOString(),
+  ).toZonedDateTimeISO(userTimezone);
 
   const shouldShowTimezoneAbbreviation = !isSystemTimezone;
   const timezoneSuffix = !isSystemTimezone
-    ? ` ${getTimezoneAbbreviationForPointInTime(date ?? new Date())}`
+    ? ` ${getTimezoneAbbreviationForPointInTime(zonedDate)}`
     : '';
 
   if (!shouldShowTimezoneAbbreviation) {

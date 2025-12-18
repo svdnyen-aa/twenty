@@ -18,6 +18,7 @@ import { addMonths, setMonth, setYear, subMonths } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRecoilValue } from 'recoil';
 
+import { Temporal } from 'temporal-polyfill';
 import { type Nullable } from 'twenty-shared/types';
 import {
   getDateFromPlainDate,
@@ -412,11 +413,24 @@ export const DatePicker = ({
     handleClose?.(plainDate);
   };
 
+  console.log({
+    relativeDate,
+  });
+
   const highlightedDates =
     isRelative && isDefined(relativeDate?.end) && isDefined(relativeDate?.start)
       ? getHighlightedDates({
-          start: getDateFromPlainDate(relativeDate.start),
-          end: getDateFromPlainDate(relativeDate.end),
+          start: new Date(
+            Temporal.PlainDate.from(relativeDate.start)
+              .toPlainDateTime()
+              .toString(),
+          ),
+          end: new Date(
+            Temporal.PlainDate.from(relativeDate.end)
+              .subtract({ days: 1 })
+              .toPlainDateTime()
+              .toString(),
+          ),
         })
       : [];
 
@@ -427,6 +441,8 @@ export const DatePicker = ({
     : isDefined(dateAsDate)
       ? [dateAsDate]
       : [];
+
+  console.log({ selectedDates });
 
   const calendarStartDay =
     currentWorkspaceMember?.calendarStartDay === CalendarStartDay.SYSTEM

@@ -224,7 +224,9 @@ export const turnAnyFieldFilterIntoRecordGqlFilter = ({
   const baseRecordGqlOperationFilters = anyFieldRecordFilters
     .map((recordFilter) =>
       turnRecordFilterIntoRecordGqlOperationFilter({
-        filterValueDependencies: {},
+        filterValueDependencies: {
+          timeZone: 'UTC',
+        },
         fieldMetadataItems: fields,
         recordFilter,
       }),

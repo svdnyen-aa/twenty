@@ -10,6 +10,8 @@ import {
 import { transformTwoDimensionalGroupByToLineChartData } from '../transformTwoDimensionalGroupByToLineChartData';
 
 describe('transformTwoDimensionalGroupByToLineChartData', () => {
+  const userTimezone = 'Europe/Paris';
+
   const mockAggregateField: FieldMetadataItem = {
     id: 'amount-field',
     name: 'amount',
@@ -56,27 +58,27 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should create multiple series from 2D groupBy results', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01', 'Qualification'],
+          groupByDimensionValues: ['2024-01-01', 'Qualification'],
           sumAmount: 50000,
         },
         {
-          groupByDimensionValues: ['2024-01', 'Proposal'],
+          groupByDimensionValues: ['2024-01-01', 'Proposal'],
           sumAmount: 75000,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Qualification'],
+          groupByDimensionValues: ['2024-02-01', 'Qualification'],
           sumAmount: 60000,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Proposal'],
+          groupByDimensionValues: ['2024-02-01', 'Proposal'],
           sumAmount: 90000,
         },
         {
-          groupByDimensionValues: ['2024-03', 'Qualification'],
+          groupByDimensionValues: ['2024-03-01', 'Qualification'],
           sumAmount: 55000,
         },
         {
-          groupByDimensionValues: ['2024-03', 'Proposal'],
+          groupByDimensionValues: ['2024-03-01', 'Proposal'],
           sumAmount: 80000,
         },
       ];
@@ -90,6 +92,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toHaveLength(2);
@@ -119,15 +122,15 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should preserve backend ordering of data points', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01', 'Stage A'],
+          groupByDimensionValues: ['2024-01-01', 'Stage A'],
           sumAmount: 100,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Stage A'],
+          groupByDimensionValues: ['2024-02-01', 'Stage A'],
           sumAmount: 200,
         },
         {
-          groupByDimensionValues: ['2024-03', 'Stage A'],
+          groupByDimensionValues: ['2024-03-01', 'Stage A'],
           sumAmount: 300,
         },
       ];
@@ -141,6 +144,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       const series = result.series[0];
@@ -154,19 +158,19 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should normalize sparse data (all series share same X values, with 0 for missing)', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01', 'Stage A'],
+          groupByDimensionValues: ['2024-01-01', 'Stage A'],
           sumAmount: 100,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Stage A'],
+          groupByDimensionValues: ['2024-02-01', 'Stage A'],
           sumAmount: 200,
         },
         {
-          groupByDimensionValues: ['2024-01', 'Stage B'],
+          groupByDimensionValues: ['2024-01-01', 'Stage B'],
           sumAmount: 150,
         },
         {
-          groupByDimensionValues: ['2024-03', 'Stage B'],
+          groupByDimensionValues: ['2024-03-01', 'Stage B'],
           sumAmount: 250,
         },
       ];
@@ -180,6 +184,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       const stageA = result.series.find((s) => s.id === 'Stage A');
@@ -200,15 +205,15 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should filter out null aggregate values', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01', 'Stage A'],
+          groupByDimensionValues: ['2024-01-01', 'Stage A'],
           sumAmount: 100,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Stage A'],
+          groupByDimensionValues: ['2024-02-01', 'Stage A'],
           sumAmount: null,
         },
         {
-          groupByDimensionValues: ['2024-03', 'Stage A'],
+          groupByDimensionValues: ['2024-03-01', 'Stage A'],
           sumAmount: 200,
         },
       ];
@@ -222,6 +227,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series[0].data).toHaveLength(2);
@@ -242,6 +248,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toEqual([]);
@@ -251,11 +258,11 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should skip results with missing dimension values', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01'],
+          groupByDimensionValues: ['2024-01-01'],
           sumAmount: 100,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Stage A'],
+          groupByDimensionValues: ['2024-02-01', 'Stage A'],
           sumAmount: 200,
         },
       ];
@@ -269,6 +276,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toHaveLength(1);
@@ -280,11 +288,11 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
     it('should handle COUNT operation', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01', 'Stage A'],
+          groupByDimensionValues: ['2024-01-01', 'Stage A'],
           _count: 5,
         },
         {
-          groupByDimensionValues: ['2024-02', 'Stage A'],
+          groupByDimensionValues: ['2024-02-01', 'Stage A'],
           _count: 10,
         },
       ];
@@ -300,6 +308,7 @@ describe('transformTwoDimensionalGroupByToLineChartData', () => {
         aggregateOperation: '_count',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series[0].data.map((d) => d.y)).toEqual([5, 10]);

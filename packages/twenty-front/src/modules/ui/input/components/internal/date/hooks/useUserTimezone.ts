@@ -1,6 +1,6 @@
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
-import { tzName } from '@date-fns/tz';
 import { useRecoilValue } from 'recoil';
+import { type Temporal } from 'temporal-polyfill';
 
 export const useUserTimezone = () => {
   const currentWorkspaceMember = useRecoilValue(currentWorkspaceMemberState);
@@ -13,8 +13,18 @@ export const useUserTimezone = () => {
 
   const isSystemTimezone = userTimezone === systemTimeZone;
 
-  const getTimezoneAbbreviationForPointInTime = (date: Date) => {
-    return tzName(userTimezone, date, 'short');
+  const getTimezoneAbbreviationForPointInTime = (
+    zonedDateTime: Temporal.ZonedDateTime,
+  ) => {
+    const parts = new Intl.DateTimeFormat('en', {
+      timeZoneName: 'short',
+      timeZone: userTimezone,
+    }).formatToParts(new Date(zonedDateTime.toInstant().toString()));
+
+    const timeZoneName = parts.filter((p) => p.type === 'timeZoneName')[0]
+      .value;
+
+    return timeZoneName;
   };
 
   return {

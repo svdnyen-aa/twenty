@@ -9,7 +9,7 @@ import { DateTimePicker } from '@/ui/input/components/internal/date/components/D
 import { useRecoilComponentValue } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentValue';
 import { UserContext } from '@/users/contexts/UserContext';
 import { stringifyRelativeDateFilter } from '@/views/view-filter-value/utils/stringifyRelativeDateFilter';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ViewFilterOperand, type FirstDayOfTheWeek } from 'twenty-shared/types';
 import {
@@ -18,6 +18,10 @@ import {
   type RelativeDateFilter,
 } from 'twenty-shared/utils';
 
+import { objectFilterDropdownDateTimeInternalZonedDateTimeComponentState } from '@/object-record/object-filter-dropdown/states/objectFilterDropdownDateTimeInternalZonedDateTimeComponentState';
+import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
+import { useRecoilComponentState } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentState';
+import { Temporal } from 'temporal-polyfill';
 import { dateLocaleState } from '~/localization/states/dateLocaleState';
 import { formatDateTimeString } from '~/utils/string/formatDateTimeString';
 
@@ -26,6 +30,8 @@ export const ObjectFilterDropdownDateTimeInput = () => {
   const dateLocale = useRecoilValue(dateLocaleState);
   const currentWorkspaceMember = useRecoilValue(currentWorkspaceMemberState);
 
+  const { userTimezone } = useUserTimezone();
+
   const objectFilterDropdownCurrentRecordFilter = useRecoilComponentValue(
     objectFilterDropdownCurrentRecordFilterComponentState,
   );
@@ -33,16 +39,19 @@ export const ObjectFilterDropdownDateTimeInput = () => {
   const { applyObjectFilterDropdownFilterValue } =
     useApplyObjectFilterDropdownFilterValue();
 
-  const initialFilterValue = isDefined(objectFilterDropdownCurrentRecordFilter)
-    ? resolveDateTimeFilter(objectFilterDropdownCurrentRecordFilter)
-    : null;
-
-  const [internalDate, setInternalDate] = useState<Date | null>(
-    initialFilterValue instanceof Date ? initialFilterValue : null,
-  );
+  const [objectFilterDropdownDateTimeInternalZonedDateTime, setInternalDate] =
+    useRecoilComponentState(
+      objectFilterDropdownDateTimeInternalZonedDateTimeComponentState,
+    );
 
   const handleAbsoluteDateChange = (newDate: Date | null) => {
-    setInternalDate(newDate);
+    const newZonedDateTime = isDefined(newDate)
+      ? Temporal.Instant.from(newDate.toISOString()).toZonedDateTimeISO(
+          userTimezone,
+        )
+      : null;
+
+    setInternalDate(newZonedDateTime);
 
     const newFilterValue = newDate?.toISOString() ?? '';
 
@@ -98,14 +107,25 @@ export const ObjectFilterDropdownDateTimeInput = () => {
       ? handleRelativeDateChange(null)
       : handleAbsoluteDateChange(null);
   };
+
   const resolvedValue = objectFilterDropdownCurrentRecordFilter
     ? resolveDateTimeFilter(objectFilterDropdownCurrentRecordFilter)
     : null;
 
   const relativeDate =
-    resolvedValue && !(resolvedValue instanceof Date)
+    isDefined(resolvedValue) && typeof resolvedValue === 'object'
       ? resolvedValue
       : undefined;
+
+  const internalDate = isDefined(
+    objectFilterDropdownDateTimeInternalZonedDateTime,
+  )
+    ? new Date(
+        objectFilterDropdownDateTimeInternalZonedDateTime
+          ?.toInstant()
+          .toString(),
+      )
+    : new Date();
 
   return (
     <DateTimePicker

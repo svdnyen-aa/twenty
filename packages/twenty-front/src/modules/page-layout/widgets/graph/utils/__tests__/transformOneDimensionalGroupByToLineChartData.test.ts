@@ -10,6 +10,8 @@ import {
 import { transformOneDimensionalGroupByToLineChartData } from '../transformOneDimensionalGroupByToLineChartData';
 
 describe('transformOneDimensionalGroupByToLineChartData', () => {
+  const userTimezone = 'Europe/Paris';
+
   const mockAggregateField: FieldMetadataItem = {
     id: 'amount-field',
     name: 'amount',
@@ -76,6 +78,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toHaveLength(1);
@@ -116,6 +119,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series[0].data).toEqual([
@@ -130,15 +134,15 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
     it('should transform date-based groupBy results', () => {
       const rawResults: GroupByRawResult[] = [
         {
-          groupByDimensionValues: ['2024-01'],
+          groupByDimensionValues: ['2024-01-01'],
           sumAmount: 50000,
         },
         {
-          groupByDimensionValues: ['2024-02'],
+          groupByDimensionValues: ['2024-02-01'],
           sumAmount: 75000,
         },
         {
-          groupByDimensionValues: ['2024-03'],
+          groupByDimensionValues: ['2024-03-01'],
           sumAmount: 60000,
         },
       ];
@@ -154,6 +158,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toHaveLength(1);
@@ -173,6 +178,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series).toHaveLength(1);
@@ -194,6 +200,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: 'sumAmount',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series[0].color).toBeDefined();
@@ -222,6 +229,7 @@ describe('transformOneDimensionalGroupByToLineChartData', () => {
         aggregateOperation: '_count',
         objectMetadataItem: mockObjectMetadataItem,
         primaryAxisSubFieldName: null,
+        userTimezone,
       });
 
       expect(result.series[0].data).toEqual([

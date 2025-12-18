@@ -39,6 +39,7 @@ import { WORKSPACE_MEMBER_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev
 
 const client = request(`http://localhost:${APP_PORT}`);
 
+// TODO: fix this with the new timezone handling
 describe('group-by resolver (integration)', () => {
   describe('standard case', () => {
     const testPersonId = randomUUID();
@@ -311,7 +312,9 @@ describe('group-by resolver (integration)', () => {
         groupByOperationFactory({
           objectMetadataSingularName: 'person',
           objectMetadataPluralName: 'people',
-          groupBy: [{ createdAt: { granularity: 'MONTH' } }],
+          groupBy: [
+            { createdAt: { granularity: 'MONTH', timeZone: 'Europe/Paris' } },
+          ],
           filter: filter2025,
         }),
       );
@@ -322,6 +325,7 @@ describe('group-by resolver (integration)', () => {
       expect(Array.isArray(groups)).toBe(true);
       expect(groups.length).toBe(2);
 
+      // TODO: fix this test with new Temporal API which shouldn't produce this bug anymore
       // Expect two groups: one with 2 records (January) and one with 1 record (March)
       // Note: DATE_TRUNC returns dates in server timezone, which when converted to UTC
       // may show as the previous day at 23:00 (e.g., 2024-12-31T23:00 for Jan 1 local)

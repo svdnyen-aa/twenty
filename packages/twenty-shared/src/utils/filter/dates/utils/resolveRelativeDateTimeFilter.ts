@@ -1,51 +1,55 @@
-import { addUnitToDateTime } from '@/utils/filter/dates/utils/addUnitToDateTime';
-import { getEndUnitOfDateTime } from '@/utils/filter/dates/utils/getEndUnitOfDateTime';
-import { getStartUnitOfDateTime } from '@/utils/filter/dates/utils/getStartUnitOfDateTime';
+import { addUnitToZonedDateTime } from '@/utils/filter/dates/utils/addUnitToZonedDateTime';
+import { getNextPeriodStart } from '@/utils/filter/dates/utils/getNextPeriodStart';
+import { getPeriodStart } from '@/utils/filter/dates/utils/getPeriodStart';
 import { type RelativeDateFilter } from '@/utils/filter/dates/utils/relativeDateFilterSchema';
-import { subUnitFromDateTime } from '@/utils/filter/dates/utils/subUnitFromDateTime';
+import { subUnitFromZonedDateTime } from '@/utils/filter/dates/utils/subUnitFromZonedDateTime';
 import { isDefined } from '@/utils/validation';
-import { TZDate } from '@date-fns/tz';
-import { isNonEmptyString } from '@sniptt/guards';
-import { roundToNearestMinutes } from 'date-fns';
+import { type Temporal } from 'temporal-polyfill';
 
 export const resolveRelativeDateTimeFilter = (
   relativeDateFilter: RelativeDateFilter,
+  referenceZonedDateTime: Temporal.ZonedDateTime,
 ) => {
-  const { direction, amount, unit, timezone, firstDayOfTheWeek } =
-    relativeDateFilter;
-
-  const referenceDate = roundToNearestMinutes(
-    isNonEmptyString(timezone)
-      ? new TZDate().withTimeZone(timezone)
-      : new TZDate(),
-  );
+  const { direction, amount, unit, firstDayOfTheWeek } = relativeDateFilter;
 
   switch (direction) {
-    case 'NEXT':
+    case 'NEXT': {
       if (!isDefined(amount)) {
         throw new Error('Amount is required');
       }
 
+      const startOfNextDay = referenceZonedDateTime
+        .startOfDay()
+        .add({ days: 1 });
+
       return {
         ...relativeDateFilter,
-        start: referenceDate,
-        end: addUnitToDateTime(referenceDate, amount, unit),
+        start: startOfNextDay,
+        end: addUnitToZonedDateTime(startOfNextDay, unit, amount),
       };
-    case 'PAST':
+    }
+    case 'PAST': {
       if (!isDefined(amount)) {
         throw new Error('Amount is required');
       }
 
+      const startOfDay = referenceZonedDateTime.startOfDay();
+
       return {
         ...relativeDateFilter,
-        start: subUnitFromDateTime(referenceDate, amount, unit),
-        end: referenceDate,
+        start: subUnitFromZonedDateTime(startOfDay, unit, amount),
+        end: startOfDay,
       };
+    }
     case 'THIS':
       return {
         ...relativeDateFilter,
-        start: getStartUnitOfDateTime(referenceDate, unit, firstDayOfTheWeek),
-        end: getEndUnitOfDateTime(referenceDate, unit, firstDayOfTheWeek),
+        start: getPeriodStart(referenceZonedDateTime, unit, firstDayOfTheWeek),
+        end: getNextPeriodStart(
+          referenceZonedDateTime,
+          unit,
+          firstDayOfTheWeek,
+        ),
       };
   }
 };

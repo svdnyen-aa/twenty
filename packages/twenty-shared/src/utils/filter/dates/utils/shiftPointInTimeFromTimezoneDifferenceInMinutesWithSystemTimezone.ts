@@ -1,6 +1,7 @@
 import { computeTimezoneDifferenceInMinutes } from '@/utils/filter/utils/computeTimezoneDifferenceInMinutes';
 import { addMinutes, subMinutes } from 'date-fns';
 
+// TODO: replace this with Temporal
 export const shiftPointInTimeFromTimezoneDifferenceInMinutesWithSystemTimezone =
   (pointInTime: Date, targetTimezone: string, direction: 'add' | 'sub') => {
     const systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;

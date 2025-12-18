@@ -26,6 +26,10 @@ export const EditableFilterChip = ({
     recordFilter.fieldMetadataId,
   );
 
+  console.log({
+    recordFilter,
+  });
+
   const { getRecordFilterChipLabelValue } = useGetRecordFilterChipLabelValue();
 
   const FieldMetadataItemIcon = getIcon(fieldMetadataItem.icon);

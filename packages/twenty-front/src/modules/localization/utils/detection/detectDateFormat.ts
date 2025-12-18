@@ -1,4 +1,5 @@
 import { type DateFormat } from '@/localization/constants/DateFormat';
+import { Intl } from 'temporal-polyfill';
 
 export const detectDateFormat = (): keyof typeof DateFormat => {
   try {

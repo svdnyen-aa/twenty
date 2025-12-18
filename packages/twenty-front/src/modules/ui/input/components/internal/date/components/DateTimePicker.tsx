@@ -26,6 +26,7 @@ import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMembe
 import { useTurnPointInTimeIntoReactDatePickerShiftedDate } from '@/ui/input/components/internal/date/hooks/useTurnPointInTimeIntoReactDatePickerShiftedDate';
 import { useTurnReactDatePickerShiftedDateBackIntoPointInTime } from '@/ui/input/components/internal/date/hooks/useTurnReactDatePickerShiftedDateBackIntoPointInTime';
 import { useRecoilValue } from 'recoil';
+import { type Temporal } from 'temporal-polyfill';
 import { isDefined, type RelativeDateFilter } from 'twenty-shared/utils';
 
 export const MONTH_AND_YEAR_DROPDOWN_MONTH_SELECT_ID =
@@ -305,8 +306,8 @@ type DateTimePickerProps = {
   hideHeaderInput?: boolean;
   date: Date | null;
   relativeDate?: RelativeDateFilter & {
-    start: Date;
-    end: Date;
+    start: Temporal.ZonedDateTime;
+    end?: Temporal.ZonedDateTime;
   };
   onClose?: (date: Date | null) => void;
   onChange?: (date: Date | null) => void;
@@ -423,9 +424,13 @@ export const DateTimePicker = ({
   const highlightedDates =
     isRelative && isDefined(relativeDate?.end) && isDefined(relativeDate?.start)
       ? getHighlightedDates({
-          end: turnPointInTimeIntoReactDatePickerShiftedDate(relativeDate?.end),
+          end: turnPointInTimeIntoReactDatePickerShiftedDate(
+            new Date(
+              relativeDate?.end.subtract({ days: 1 }).toInstant().toString(),
+            ),
+          ),
           start: turnPointInTimeIntoReactDatePickerShiftedDate(
-            relativeDate?.start,
+            new Date(relativeDate?.start.toInstant().toString()),
           ),
         })
       : [];
@@ -437,6 +442,13 @@ export const DateTimePicker = ({
   const selectedDates = isRelative
     ? highlightedDates
     : [reactPickerShiftedDate];
+
+  console.log({
+    selectedDates,
+    highlightedDates,
+    reactPickerShiftedDate,
+    relativeDate,
+  });
 
   return (
     <StyledContainer calendarDisabled={isRelative}>

@@ -22,6 +22,7 @@ type TransformGroupByDataToPieChartDataParams = {
   objectMetadataItems: ObjectMetadataItem[];
   configuration: PieChartConfiguration;
   aggregateOperation: string;
+  userTimezone: string;
 };
 
 type TransformGroupByDataToPieChartDataResult = {
@@ -44,6 +45,7 @@ export const transformGroupByDataToPieChartData = ({
   objectMetadataItems,
   configuration,
   aggregateOperation,
+  userTimezone,
 }: TransformGroupByDataToPieChartDataParams): TransformGroupByDataToPieChartDataResult => {
   if (!isDefined(groupByData)) {
     return EMPTY_PIE_CHART_RESULT;
@@ -100,6 +102,7 @@ export const transformGroupByDataToPieChartData = ({
     primaryAxisDateGranularity: dateGranularity,
     primaryAxisGroupBySubFieldName:
       configuration.groupBySubFieldName ?? undefined,
+    userTimezone,
   });
 
   const formattedToRawLookup = buildFormattedToRawLookup(formattedValues);
