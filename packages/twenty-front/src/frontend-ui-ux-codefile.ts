@@ -148,8 +148,8 @@ export const frontendUiUxCodefile: UiUxBlueprint = {
       summary:
         'Centralized dialog manager and snack bar system keyed by SnackBarComponentInstanceContext to unify modals and toasts.',
       keyFiles: [
-        'src/modules/ui/feedback/dialog-manager',
-        'src/modules/ui/feedback/snack-bar-manager',
+        'src/modules/ui/feedback/dialog-manager/components/DialogManager.tsx',
+        'src/modules/ui/feedback/snack-bar-manager/components/SnackBarProvider.tsx',
         'src/modules/ui/feedback/snack-bar-manager/contexts/SnackBarComponentInstanceContext.ts',
       ],
       integrationNotes:
@@ -163,7 +163,7 @@ export const frontendUiUxCodefile: UiUxBlueprint = {
         'The twenty-ui theme barrel exports ThemeContextProvider plus light/dark tokens (THEME_LIGHT/THEME_DARK), spacing, typography, and helpers like getNextThemeColor.',
       keyFiles: ['packages/twenty-ui/src/theme/index.ts'],
       integrationNotes:
-        'Wrap screens with ThemeContextProvider and pull constants such as THEME_LIGHT, THEME_DARK, and ANIMATION to match spacing, color, and motion guidelines. Paths are rooted at the shared packages/twenty-ui design-system package.',
+        'Wrap screens with ThemeContextProvider and pull constants such as THEME_LIGHT, THEME_DARK, and ANIMATION to match spacing, color, and motion guidelines. Paths are rooted at the shared packages/twenty-ui design system package.',
     },
     {
       name: 'Reusable UI components',
