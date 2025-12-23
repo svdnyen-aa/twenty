@@ -83,7 +83,7 @@ export const frontendUiUxCodefile: UiUxBlueprint = {
         'src/modules/page-layout/PageLayoutMainContent.tsx',
       ],
       integrationNotes:
-        'Mount PageLayoutRenderer inside the workspace shell to reuse drag-selection and grid-resize behaviors; pair with PageLayoutTabList components to manage multi-tab layouts.',
+        'Mount PageLayoutRenderer inside the workspace shell to reuse drag-selection and grid-resize behaviors; pair with PageLayoutTabList components to manage multi-tab layouts. PageLayoutMainContent.tsx is rooted at src/modules/page-layout to anchor the module entry point.',
     },
   ],
   dataEntry: [
@@ -202,4 +202,8 @@ export const providerStackExample = `<RecoilRoot>
 </RecoilRoot>`;
 
 export const designSystemImportsExample =
-  "import { ThemeContextProvider, THEME_LIGHT, THEME_DARK } from 'twenty-ui/theme';\nimport { Avatar, IconsProvider } from 'twenty-ui/display';\nimport { Button } from 'twenty-ui/input';\nimport { NavigationBar } from 'twenty-ui/navigation';\nimport { Loader } from 'twenty-ui/feedback';";
+  `import { ThemeContextProvider, THEME_LIGHT, THEME_DARK } from 'twenty-ui/theme';
+import { Avatar, IconsProvider } from 'twenty-ui/display';
+import { Button } from 'twenty-ui/input';
+import { NavigationBar } from 'twenty-ui/navigation';
+import { Loader } from 'twenty-ui/feedback';`;
