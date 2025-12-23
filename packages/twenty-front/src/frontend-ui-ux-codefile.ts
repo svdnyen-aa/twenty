@@ -80,10 +80,10 @@ export const frontendUiUxCodefile: UiUxBlueprint = {
       keyFiles: [
         'src/modules/page-layout/components/PageLayoutRenderer.tsx',
         'src/modules/page-layout/components/PageLayoutGridLayout.tsx',
-        'src/modules/page-layout/PageLayoutMainContent.tsx',
+        'src/modules/page-layout/components/PageLayoutContent.tsx',
       ],
       integrationNotes:
-        'Mount PageLayoutRenderer inside the workspace shell to reuse drag-selection and grid-resize behaviors; pair with PageLayoutTabList components to manage multi-tab layouts. PageLayoutMainContent.tsx is rooted at src/modules/page-layout to anchor the module entry point.',
+        'Mount PageLayoutRenderer inside the workspace shell to reuse drag-selection and grid-resize behaviors; pair with PageLayoutTabList components to manage multi-tab layouts.',
     },
   ],
   dataEntry: [
