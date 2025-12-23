@@ -161,22 +161,22 @@ export const frontendUiUxCodefile: UiUxBlueprint = {
       name: 'Theme and tokens',
       summary:
         'The twenty-ui theme barrel exports ThemeContextProvider plus light/dark tokens (THEME_LIGHT/THEME_DARK), spacing, typography, and helpers like getNextThemeColor.',
-      keyFiles: ['packages/twenty-ui/src/theme/index.ts'],
+      keyFiles: ['src/theme/index.ts'],
       integrationNotes:
-        'Wrap screens with ThemeContextProvider and pull constants such as THEME_LIGHT, THEME_DARK, and ANIMATION to match spacing, color, and motion guidelines.',
+        'Wrap screens with ThemeContextProvider and pull constants such as THEME_LIGHT, THEME_DARK, and ANIMATION to match spacing, color, and motion guidelines. Paths are relative to the shared packages/twenty-ui design-system package.',
     },
     {
       name: 'Reusable UI components',
       summary:
         'Barrel exports across display, input, navigation, and feedback include Avatars/Banners/Icons, Button and form controls, navigation bars/drawers, and loaders/progress indicators.',
       keyFiles: [
-        'packages/twenty-ui/src/display/index.ts',
-        'packages/twenty-ui/src/input/index.ts',
-        'packages/twenty-ui/src/navigation/index.ts',
-        'packages/twenty-ui/src/feedback/index.ts',
+        'src/display/index.ts',
+        'src/input/index.ts',
+        'src/navigation/index.ts',
+        'src/feedback/index.ts',
       ],
       integrationNotes:
-        'Import from the top-level barrels (e.g., import { Avatar, IconsProvider } from "twenty-ui/display") to reuse the visual system without reimplementing primitives.',
+        'Import from the top-level barrels (e.g., import { Avatar, IconsProvider } from "twenty-ui/display") to reuse the visual system without reimplementing primitives. These paths live inside packages/twenty-ui.',
     },
   ],
 };
